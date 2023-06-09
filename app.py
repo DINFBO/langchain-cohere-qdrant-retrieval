@@ -51,8 +51,8 @@ def retrieve_info():
 
     embeddings = CohereEmbeddings(model="multilingual-22-12", cohere_api_key=cohere_api_key)
     qdrant = Qdrant(client=client, collection_name=collection_name, embedding_function=embeddings.embed_query)
-    search_results = qdrant.similarity_search(query, k=2)
+    search_results = qdrant.similarity_search(query, k=3)
     chain = load_qa_chain(OpenAI(openai_api_key=openai_api_key,temperature=0.2), chain_type="stuff")
     results = chain({"input_documents": search_results, "question": query}, return_only_outputs=True)
     
-    return {"results":results["output_text"]}
+    return {"results":search_results}
